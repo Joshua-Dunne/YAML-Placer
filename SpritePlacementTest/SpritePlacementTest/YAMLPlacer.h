@@ -1,13 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
 
 /// <summary>
 /// YAML Placer by Joshua Dunne - C00241588 for Tank YAML Project
 /// -------------------------------------------------------------
 /// Start Date: 25/10/19
 /// End Date: ???
-/// Time Taken: ~6 Hours
+/// Time Taken: ~8 Hours
 /// -------------------------------------------------------------
 /// YAML Obstacle Placer - Add this to your project and call it's functions to place obstacles!
 /// Can place both Walls and Targets (Targets coming soon)

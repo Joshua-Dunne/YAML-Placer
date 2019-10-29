@@ -1,7 +1,4 @@
 #include "YAMLPlacer.h"
-#include <string>
-#include <iostream>
-#include <fstream>
 
 YAMLPlacer::YAMLPlacer()
 {
@@ -28,10 +25,20 @@ YAMLPlacer::YAMLPlacer()
 	m_previousObstacle.setOrigin(m_wallRect.width / 2.0f, m_wallRect.height / 2.0f);
 }
 
+/// <summary>
+/// Unused Destructor, but needed to be defined
+/// </summary>
 YAMLPlacer::~YAMLPlacer()
 {
 }
 
+/// <summary>
+/// Show a Preview of the currently selected Sprite type at the Player's mouse,
+/// to show what the Sprite will look like when placed.
+/// 
+/// Also show a Preview of placed Sprites so the Player knows where they have placed them.
+/// </summary>
+/// <param name="t_window">Window to draw sprites</param>
 void YAMLPlacer::showPreview(sf::RenderWindow& t_window)
 {
 	m_obstaclePreview.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(t_window)));
@@ -46,7 +53,10 @@ void YAMLPlacer::showPreview(sf::RenderWindow& t_window)
 	}
 }
 
-
+/// <summary>
+/// Place obstacles on Mouse click, doesn't allow for overlapping obstacles.
+/// </summary>
+/// <param name="t_window">Window so we know where the User is clicking</param>
 void YAMLPlacer::placeObstacle(sf::RenderWindow& t_window)
 {
 	// First we need to make sure that the place where the Player is attempting to place an obstacle
@@ -91,6 +101,10 @@ void YAMLPlacer::placeObstacle(sf::RenderWindow& t_window)
 #endif // _DEBUG
 }
 
+/// <summary>
+/// Get the User to choose a File to save this information to.
+/// If the file already exists, the User will be told so.
+/// </summary>
 void YAMLPlacer::pickFile()
 {
 	int choice = 0;
@@ -125,6 +139,12 @@ void YAMLPlacer::pickFile()
 	
 }
 
+/// <summary>
+/// We check to see multiple scenarios here:
+/// 1. If the file does not exist - make it and fill it with information.
+/// 2. If the file does exist, but obstacle does not, make an obstacle tab and fill information underneath.
+/// 3. If the file exists, AND obstacle exists, fill information underneath obstacle.
+/// </summary>
 void YAMLPlacer::saveToFile()
 {
 	std::string line; // current line
@@ -136,7 +156,7 @@ void YAMLPlacer::saveToFile()
 	fileToUse.open("resources/levels/level" + std::to_string(m_levelNum) + ".yaml", std::ios::in | std::ios::app);
 
 
-	if (fileToUse.is_open()) // while we can read the file
+	if (fileToUse.is_open()) // if we can read the file
 	{
 		if (fileToUse.peek() == std::ios::traits_type::eof())
 		{ // if the file has nothing in it
@@ -199,7 +219,6 @@ void YAMLPlacer::saveToFile()
 				constructYAML(fileToUse);
 			}
 		}
-		
 	}
 	else
 	{
@@ -220,7 +239,6 @@ void YAMLPlacer::constructYAML(std::fstream & m_fileToUse)
 	Target:
 	Target
 	*/
-
 
 	for (size_t index = 0; index < m_types.size(); index++)
 	{
@@ -247,6 +265,9 @@ void YAMLPlacer::constructYAML(std::fstream & m_fileToUse)
 	}
 }
 
+/// <summary>
+/// Increase rotation of our Preview sprite and wrap around at 360
+/// </summary>
 void YAMLPlacer::increaseRotation()
 {
 	m_previewRotation += 1;
@@ -256,6 +277,9 @@ void YAMLPlacer::increaseRotation()
 	}
 }
 
+/// <summary>
+/// Decrease rotation of our Preview sprite and wrap back around at 0
+/// </summary>
 void YAMLPlacer::decreaseRotation()
 {
 	m_previewRotation -= 1;
@@ -265,6 +289,9 @@ void YAMLPlacer::decreaseRotation()
 	}
 }
 
+/// <summary>
+/// Let the user choose obstacles using Num1 or Num2
+/// </summary>
 void YAMLPlacer::pickObstacle()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
@@ -277,6 +304,10 @@ void YAMLPlacer::pickObstacle()
 	}
 }
 
+/// <summary>
+/// Get the current obstacle type that the preview is showing
+/// </summary>
+/// <returns>Current type for preview</returns>
 YAMLPlacer::ObstacleType YAMLPlacer::getType() const
 {
 	return m_previewType;
