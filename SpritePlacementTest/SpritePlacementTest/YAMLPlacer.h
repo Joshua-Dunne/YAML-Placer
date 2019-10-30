@@ -46,6 +46,7 @@ private:
 	sf::Sprite m_previousObstacle;
 
 	sf::IntRect m_wallRect{ 2, 129, 33, 23 }; // place on texture map where walls are
+	sf::IntRect m_targetRect{ 53, 129, 33, 23 };
 	sf::Texture m_texture;
 
 public:
@@ -59,6 +60,7 @@ public:
 	void decreaseRotation();
 
 	void pickObstacle();
+	void undoObstacle();
 	ObstacleType getType() const;
 };
 

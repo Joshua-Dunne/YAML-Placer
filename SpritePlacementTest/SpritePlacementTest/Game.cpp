@@ -49,6 +49,11 @@ void Game::update()
 			{
 				obstaclePlacer.increaseRotation();
 			}
+
+			if (event.key.code == sf::Keyboard::Z)
+			{
+				obstaclePlacer.undoObstacle();
+			}
 		}
 
 		if (event.type == sf::Event::MouseButtonPressed)

@@ -43,12 +43,24 @@ void YAMLPlacer::showPreview(sf::RenderWindow& t_window)
 {
 	m_obstaclePreview.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(t_window)));
 	m_obstaclePreview.setRotation(m_previewRotation);
+
+	if (m_previewType == WALL)
+		m_obstaclePreview.setTextureRect(m_wallRect);
+	else
+		m_obstaclePreview.setTextureRect(m_targetRect);
+
 	t_window.draw(m_obstaclePreview);
 
 	for (size_t index = 0; index < m_positions.size(); index++)
 	{
 		m_obstaclePreview.setPosition(m_positions[index]);
 		m_obstaclePreview.setRotation(m_rotations[index]);
+
+		if(m_types[index] == WALL)
+			m_obstaclePreview.setTextureRect(m_wallRect);
+		else
+			m_obstaclePreview.setTextureRect(m_targetRect);
+
 		t_window.draw(m_obstaclePreview);
 	}
 }
@@ -246,11 +258,14 @@ void YAMLPlacer::constructYAML(std::fstream & m_fileToUse)
 		{
 			m_fileToUse << "   - type: wall" << std::endl;
 			m_fileToUse << "     position: {x: " << m_positions[index].x << ", y: " << m_positions[index].y << "}" << std::endl;
-			m_fileToUse << "     rotation: " << m_rotations[index];
+			m_fileToUse << "     rotation: " << m_rotations[index] << std::endl;
+			m_fileToUse << "     randomOffset: 0";
 			if (index < m_positions.size() - 1)
 				m_fileToUse << std::endl; // only make a new line if there is more data to process
 		}	
 	}
+
+	m_fileToUse << std::endl;
 
 	for (size_t index = 0; index < m_types.size(); index++)
 	{
@@ -258,6 +273,7 @@ void YAMLPlacer::constructYAML(std::fstream & m_fileToUse)
 		{
 			m_fileToUse << "   - type: target" << std::endl;
 			m_fileToUse << "     position: {x: " << m_positions[index].x << ", y: " << m_positions[index].y << "}" << std::endl;
+			m_fileToUse << "     rotation: " << m_rotations[index] << std::endl;
 			m_fileToUse << "     randomOffset: 20";
 			if (index < m_positions.size() - 1)
 				m_fileToUse << std::endl; // only make a new line if there is more data to process
@@ -302,6 +318,21 @@ void YAMLPlacer::pickObstacle()
 	{
 		m_previewType = TARGET;
 	}
+}
+
+/// <summary>
+///  Remove the last placed Obstacle
+/// </summary>
+void YAMLPlacer::undoObstacle()
+{
+	if (m_positions.size() > 0)
+	{ // As long as one vector is greater than 0, they all are greater than 0.
+	  // Each vector is incremented by 1 when a new obstacle is placed, so the sizes are the same.
+		m_positions.pop_back();
+		m_rotations.pop_back();
+		m_types.pop_back();
+	}
+	
 }
 
 /// <summary>
